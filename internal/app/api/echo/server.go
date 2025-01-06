@@ -1,4 +1,4 @@
-package rest
+package echo
 
 import (
 	"context"
@@ -9,17 +9,16 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/rest/handler"
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/rest/middleware"
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/rest/validator"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/handler"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/middleware"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/validator"
 	"github.com/arafetki/go-echo-boilerplate/internal/config"
 	"github.com/arafetki/go-echo-boilerplate/internal/logging"
 	"github.com/arafetki/go-echo-boilerplate/internal/service"
-	"github.com/arafetki/go-echo-boilerplate/internal/utils"
 	"github.com/labstack/echo/v4"
 )
 
-type Server struct {
+type server struct {
 	echo    *echo.Echo
 	logger  logging.Logger
 	cfg     config.Config
@@ -27,27 +26,27 @@ type Server struct {
 	wg      sync.WaitGroup
 }
 
-func NewServer(cfg config.Config, logger logging.Logger, svc *service.Service) *Server {
-	Server := &Server{
+func NewServer(cfg config.Config, logger logging.Logger, svc *service.Service) *server {
+	server := &server{
 		echo:    echo.New(),
 		logger:  logger,
 		cfg:     cfg,
 		service: svc,
 	}
 
-	// Configure the Server
-	Server.configure()
+	// Configure the server
+	server.configure()
 
 	// Register routes
-	Server.routes(
-		handler.New(Server.service, Server.logger),
-		middleware.New(Server.cfg, Server.logger),
+	server.routes(
+		handler.New(server.service, server.logger),
+		middleware.New(server.cfg, server.logger),
 	)
 
-	return Server
+	return server
 }
 
-func (srv *Server) configure() {
+func (srv *server) configure() {
 	srv.echo.Debug = srv.cfg.Debug
 	srv.echo.HideBanner = !srv.cfg.Debug
 	srv.echo.HidePort = true
@@ -57,7 +56,7 @@ func (srv *Server) configure() {
 	srv.echo.HTTPErrorHandler = handleErrors(srv.logger)
 }
 
-func (srv *Server) Start() error {
+func (srv *server) Start() error {
 
 	shutdownErrChan := make(chan error)
 
@@ -73,7 +72,7 @@ func (srv *Server) Start() error {
 
 	}()
 
-	srv.logger.Info("🚀 Server started", "env", utils.Capitalize(srv.cfg.Env), "address", srv.cfg.Server.Addr)
+	srv.logger.Info("🚀 server started", "env", srv.cfg.Env, "address", srv.cfg.Server.Addr)
 	if err := srv.echo.Start(srv.cfg.Server.Addr); err != nil && err != http.ErrServerClosed {
 		return err
 	}
@@ -83,7 +82,7 @@ func (srv *Server) Start() error {
 		return err
 	}
 	srv.wg.Wait()
-	srv.logger.Warn("Server stopped gracefully")
+	srv.logger.Warn("server stopped gracefully")
 	return nil
 }
 
@@ -93,7 +92,7 @@ func handleErrors(logger logging.Logger) echo.HTTPErrorHandler {
 			return
 		}
 		code := http.StatusInternalServerError
-		var message any = "The Server encountered a problem and could not process your request."
+		var message any = "The server encountered a problem and could not process your request."
 		if httpError, ok := err.(*echo.HTTPError); ok {
 			code = httpError.Code
 			switch code {
@@ -104,7 +103,7 @@ func handleErrors(logger logging.Logger) echo.HTTPErrorHandler {
 			case http.StatusBadRequest:
 				message = "The request could not be understood or was missing required parameters."
 			case http.StatusInternalServerError:
-				message = "The Server encountered a problem and could not process your request."
+				message = "The server encountered a problem and could not process your request."
 			case http.StatusUnprocessableEntity:
 				message = "The request could not be processed due to invalid input."
 			default:

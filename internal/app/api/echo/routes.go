@@ -1,14 +1,14 @@
-package rest
+package echo
 
 import (
 	"net/http"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/rest/handler"
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/rest/middleware"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/handler"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/middleware"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
-func (srv *Server) routes(h *handler.Handler, m *middleware.Middleware) {
+func (srv *server) routes(h *handler.Handler, m *middleware.Middleware) {
 
 	srv.echo.Use(echoMiddleware.LoggerWithConfig(echoMiddleware.LoggerConfig{
 		Format: "[ECHO] ${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${remote_ip} | ${user_agent} | error: ${error}\n",

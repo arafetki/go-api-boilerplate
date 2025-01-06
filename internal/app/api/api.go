@@ -1,20 +1,14 @@
 package api
 
-import (
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/rest"
-	"github.com/arafetki/go-echo-boilerplate/internal/config"
-	"github.com/arafetki/go-echo-boilerplate/internal/logging"
-	"github.com/arafetki/go-echo-boilerplate/internal/service"
-)
-
+type server interface {
+	Start() error
+}
 type api struct {
-	Server interface {
-		Start() error
-	}
+	Server server
 }
 
-func New(cfg config.Config, logger logging.Logger, svc *service.Service) *api {
+func New(srv server) *api {
 	return &api{
-		Server: rest.NewServer(cfg, logger, svc),
+		Server: srv,
 	}
 }

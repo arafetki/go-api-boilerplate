@@ -6,6 +6,7 @@ import (
 	"runtime/debug"
 
 	"github.com/arafetki/go-echo-boilerplate/internal/app/api"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo"
 	"github.com/arafetki/go-echo-boilerplate/internal/config"
 	"github.com/arafetki/go-echo-boilerplate/internal/db"
 	"github.com/arafetki/go-echo-boilerplate/internal/db/sqlc"
@@ -46,8 +47,11 @@ func run(logger logging.SlogLogger) error {
 	// Initialize services
 	svc := service.New(sqlc.New(db))
 
+	// Initialize Echo server instance
+	server := echo.NewServer(cfg, logger, svc)
+
 	// Initialize API instance
-	api := api.New(cfg, logger, svc)
+	api := api.New(server)
 
 	return api.Server.Start()
 }
