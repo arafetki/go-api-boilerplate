@@ -1,4 +1,4 @@
-package handlers
+package handler
 
 import (
 	"errors"
@@ -24,7 +24,7 @@ func (h *Handler) CreateUserHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
 
-	err := h.Service.Users.Create(sqlc.CreateUserParams{
+	err := h.service.Users.Create(sqlc.CreateUserParams{
 		Email: input.Email,
 		Name:  input.Name,
 	})
@@ -33,7 +33,7 @@ func (h *Handler) CreateUserHandler(c echo.Context) error {
 		if errors.Is(err, service.ErrDuplicateEmail) {
 			return echo.NewHTTPError(http.StatusConflict, "The email address provided is already associated with an existing account.")
 		}
-		h.Logger.Error(err.Error())
+		h.logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -46,7 +46,7 @@ func (h *Handler) FetchUserDataHandler(c echo.Context) error {
 		ID int32 `param:"id"`
 	}
 	if err := c.Bind(&params); err != nil {
-		h.Logger.Error(err.Error())
+		h.logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest)
 	}
 
@@ -55,12 +55,12 @@ func (h *Handler) FetchUserDataHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusForbidden, "You are not authorized to perform this action.")
 	}
 
-	user, err := h.Service.Users.GetOne(params.ID)
+	user, err := h.service.Users.GetOne(params.ID)
 	if err != nil {
 		if errors.Is(err, service.ErrUserNotFound) {
 			return echo.NewHTTPError(http.StatusNotFound)
 		}
-		h.Logger.Error(err.Error())
+		h.logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
