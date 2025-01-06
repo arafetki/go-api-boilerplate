@@ -23,9 +23,6 @@ func RegisterRoutes(r *echo.Echo, h *handlers.Handler, m *middlewares.Middleware
 	// health checks
 	r.GET("/health", h.HealthCheckHandler)
 
-	// hello world
-	r.GET("/hello-world", h.HelloWorldHandler)
-
 	// API version 1 prefix
 	v1 := r.Group("/v1")
 
