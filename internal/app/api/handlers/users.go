@@ -17,11 +17,11 @@ func (h *Handler) CreateUserHandler(c echo.Context) error {
 	}
 
 	if err := c.Bind(&input); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Bad request")
+		return echo.NewHTTPError(http.StatusBadRequest)
 	}
 
 	if err := c.Validate(input); err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Invalid input")
+		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
 
 	err := h.Service.Users.Create(sqlc.CreateUserParams{
@@ -34,7 +34,7 @@ func (h *Handler) CreateUserHandler(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusConflict, "The email address provided is already associated with an existing account.")
 		}
 		h.Logger.Error(err.Error())
-		return echo.NewHTTPError(http.StatusInternalServerError, "The server encountered a problem and could not process your request.")
+		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
 	return c.NoContent(http.StatusCreated)
@@ -47,7 +47,7 @@ func (h *Handler) FetchUserDataHandler(c echo.Context) error {
 	}
 	if err := c.Bind(&params); err != nil {
 		h.Logger.Error(err.Error())
-		return echo.NewHTTPError(http.StatusBadRequest, "Bad request")
+		return echo.NewHTTPError(http.StatusBadRequest)
 	}
 
 	authenticatedUser := utils.ContextGetUser(c.Request())
@@ -58,10 +58,10 @@ func (h *Handler) FetchUserDataHandler(c echo.Context) error {
 	user, err := h.Service.Users.GetOne(params.ID)
 	if err != nil {
 		if errors.Is(err, service.ErrUserNotFound) {
-			return echo.NewHTTPError(http.StatusNotFound, "The requested resource could not be found.")
+			return echo.NewHTTPError(http.StatusNotFound)
 		}
 		h.Logger.Error(err.Error())
-		return echo.NewHTTPError(http.StatusInternalServerError, "The server encountered a problem and could not process your request.")
+		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{"data": user})

@@ -11,8 +11,10 @@ import (
 
 func RegisterRoutes(r *echo.Echo, h *handlers.Handler, m *middlewares.Middleware) {
 
+	r.HTTPErrorHandler = h.CustomHttpErrorHandler
+
 	r.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "[ECHO] ${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${remote_ip} | ${user_agent}\n",
+		Format: "[ECHO] ${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${remote_ip} | ${user_agent} | error: ${error}\n",
 	}))
 	r.Use(middleware.Recover())
 	r.Use(middleware.CORSWithConfig(middleware.CORSConfig{
