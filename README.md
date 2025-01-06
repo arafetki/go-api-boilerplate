@@ -1,1 +1,1 @@
-# Boilerplate for Go Projects with Echo and Sqlc
+# Go Project Boilerplate with SQLc, PostgreSQL, and a Framework-Agnostic API Layer
