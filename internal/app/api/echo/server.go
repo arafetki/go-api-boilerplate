@@ -10,7 +10,6 @@ import (
 	"syscall"
 
 	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/handler"
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/middleware"
 	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/validator"
 	"github.com/arafetki/go-echo-boilerplate/internal/config"
 	"github.com/arafetki/go-echo-boilerplate/internal/logging"
@@ -38,10 +37,7 @@ func NewServer(cfg config.Config, logger logging.Logger, svc *service.Service) *
 	server.configure()
 
 	// Register routes
-	server.routes(
-		handler.New(server.service, server.logger),
-		middleware.New(server.cfg, server.logger),
-	)
+	server.routes(handler.New(server.service, server.logger))
 
 	return server
 }

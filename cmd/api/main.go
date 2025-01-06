@@ -50,6 +50,9 @@ func run(logger logging.SlogLogger) error {
 	// Initialize Echo server instance
 	server := echo.NewServer(cfg, logger, svc)
 
+	// Initialize Chi server instance
+	// server := chi.NewServer(cfg, logger, svc)
+
 	// Initialize API instance
 	api := api.New(server)
 

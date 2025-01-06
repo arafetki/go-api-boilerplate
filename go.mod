@@ -3,6 +3,7 @@ module github.com/arafetki/go-echo-boilerplate
 go 1.23.4
 
 require (
+	github.com/go-chi/chi/v5 v5.2.0
 	github.com/go-playground/validator/v10 v10.23.0
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/labstack/echo/v4 v4.13.3
