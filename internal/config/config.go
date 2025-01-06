@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/env"
+	"github.com/arafetki/go-api-boilerplate/internal/env"
 )
 
 type Config struct {

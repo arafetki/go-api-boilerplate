@@ -1,4 +1,4 @@
-module github.com/arafetki/go-echo-boilerplate
+module github.com/arafetki/go-api-boilerplate
 
 go 1.23.4
 

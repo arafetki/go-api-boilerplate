@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/db/sqlc"
-	"github.com/arafetki/go-echo-boilerplate/internal/utils"
+	"github.com/arafetki/go-api-boilerplate/internal/db/sqlc"
+	"github.com/arafetki/go-api-boilerplate/internal/utils"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 )

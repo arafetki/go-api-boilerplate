@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/db/sqlc"
-	"github.com/arafetki/go-echo-boilerplate/internal/service"
+	"github.com/arafetki/go-api-boilerplate/internal/db/sqlc"
+	"github.com/arafetki/go-api-boilerplate/internal/service"
 	"github.com/labstack/echo/v4"
 )
 

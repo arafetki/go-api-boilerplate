@@ -3,7 +3,7 @@ package echo
 import (
 	"net/http"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/handler"
+	"github.com/arafetki/go-api-boilerplate/internal/app/api/echo/handler"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 

@@ -1,6 +1,6 @@
 package service
 
-import "github.com/arafetki/go-echo-boilerplate/internal/db/sqlc"
+import "github.com/arafetki/go-api-boilerplate/internal/db/sqlc"
 
 type Service struct {
 	Users interface {

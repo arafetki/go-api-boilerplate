@@ -9,11 +9,11 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/handler"
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/echo/validator"
-	"github.com/arafetki/go-echo-boilerplate/internal/config"
-	"github.com/arafetki/go-echo-boilerplate/internal/logging"
-	"github.com/arafetki/go-echo-boilerplate/internal/service"
+	"github.com/arafetki/go-api-boilerplate/internal/app/api/echo/handler"
+	"github.com/arafetki/go-api-boilerplate/internal/app/api/echo/validator"
+	"github.com/arafetki/go-api-boilerplate/internal/config"
+	"github.com/arafetki/go-api-boilerplate/internal/logging"
+	"github.com/arafetki/go-api-boilerplate/internal/service"
 	"github.com/labstack/echo/v4"
 )
 

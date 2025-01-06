@@ -3,7 +3,7 @@ package db
 import (
 	"time"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/utils"
+	"github.com/arafetki/go-api-boilerplate/internal/utils"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

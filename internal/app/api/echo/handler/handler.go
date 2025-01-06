@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/arafetki/go-echo-boilerplate/internal/logging"
-	"github.com/arafetki/go-echo-boilerplate/internal/service"
+	"github.com/arafetki/go-api-boilerplate/internal/logging"
+	"github.com/arafetki/go-api-boilerplate/internal/service"
 )
 
 type Handler struct {

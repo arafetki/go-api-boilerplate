@@ -1,7 +1,7 @@
 package chi
 
 import (
-	"github.com/arafetki/go-echo-boilerplate/internal/app/api/chi/handler"
+	"github.com/arafetki/go-api-boilerplate/internal/app/api/chi/handler"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 )
 
