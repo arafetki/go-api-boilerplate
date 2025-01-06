@@ -47,14 +47,10 @@ func run(logger logging.SlogLogger) error {
 	// Initialize services
 	svc := service.New(sqlc.New(db))
 
-	// Initialize Echo server instance
-	server := echo.NewServer(cfg, logger, svc)
-
-	// Initialize Chi server instance
-	// server := chi.NewServer(cfg, logger, svc)
-
 	// Initialize API instance
-	api := api.New(server)
+	api := &api.API{
+		Server: echo.NewServer(cfg, logger, svc), // chi.NewServer(cfg, logger, svc)
+	}
 
 	return api.Server.Start()
 }
