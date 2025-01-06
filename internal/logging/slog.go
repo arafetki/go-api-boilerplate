@@ -7,28 +7,36 @@ import (
 	"github.com/lmittmann/tint"
 )
 
-type slogLogger struct {
+type SlogLogger struct {
 	logger *slog.Logger
+	level  *slog.LevelVar
 }
 
-func NewSlogLogger(writer io.Writer, level slog.Level) *slogLogger {
-	return &slogLogger{
-		logger: slog.New(tint.NewHandler(writer, &tint.Options{Level: level})),
+func NewSlogLogger(writer io.Writer, level slog.Level) SlogLogger {
+	levelVar := new(slog.LevelVar)
+	levelVar.Set(level)
+	return SlogLogger{
+		logger: slog.New(tint.NewHandler(writer, &tint.Options{Level: levelVar})),
+		level:  levelVar,
 	}
 }
 
-func (s *slogLogger) Debug(msg string, args ...any) {
+func (s SlogLogger) Debug(msg string, args ...any) {
 	s.logger.Debug(msg, args...)
 }
 
-func (s *slogLogger) Info(msg string, args ...any) {
+func (s SlogLogger) Info(msg string, args ...any) {
 	s.logger.Info(msg, args...)
 }
 
-func (s *slogLogger) Warn(msg string, args ...any) {
+func (s SlogLogger) Warn(msg string, args ...any) {
 	s.logger.Warn(msg, args...)
 }
 
-func (s *slogLogger) Error(msg string, args ...any) {
+func (s SlogLogger) Error(msg string, args ...any) {
 	s.logger.Error(msg, args...)
+}
+
+func (s *SlogLogger) SetLevel(level slog.Level) {
+	s.level.Set(level)
 }

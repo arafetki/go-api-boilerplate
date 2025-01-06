@@ -8,7 +8,7 @@ import (
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
-func (srv *server) routes(h *handler.Handler, m *middleware.Middleware) {
+func (srv *Server) routes(h *handler.Handler, m *middleware.Middleware) {
 
 	srv.echo.Use(echoMiddleware.LoggerWithConfig(echoMiddleware.LoggerConfig{
 		Format: "[ECHO] ${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${remote_ip} | ${user_agent} | error: ${error}\n",

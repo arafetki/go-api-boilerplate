@@ -5,32 +5,49 @@ import (
 	"os"
 	"runtime/debug"
 
-	"github.com/arafetki/go-echo-boilerplate/internal/app"
+	"github.com/arafetki/go-echo-boilerplate/internal/app/api"
 	"github.com/arafetki/go-echo-boilerplate/internal/config"
+	"github.com/arafetki/go-echo-boilerplate/internal/db"
+	"github.com/arafetki/go-echo-boilerplate/internal/db/sqlc"
 	"github.com/arafetki/go-echo-boilerplate/internal/logging"
+	"github.com/arafetki/go-echo-boilerplate/internal/service"
 )
 
 func main() {
 
+	// Create slog instance
+	logger := logging.NewSlogLogger(os.Stdout, slog.LevelInfo)
+
+	// Run the application
+	if err := run(logger); err != nil {
+		trace := string(debug.Stack())
+		logger.Error(err.Error(), "trace", trace)
+		os.Exit(1)
+	}
+}
+
+func run(logger logging.SlogLogger) error {
 	// Initialize the configuration
 	cfg := config.Init()
 
 	// Set the log level based on the debug flag
-	slogLevel := slog.LevelInfo
 	if cfg.Debug {
-		slogLevel = slog.LevelDebug
+		logger.SetLevel(slog.LevelDebug)
 	}
 
-	// Create slog instance
-	slogLogger := logging.NewSlogLogger(os.Stdout, slogLevel)
-
-	// Initialize the application
-	app := app.New(cfg, slogLogger)
-
-	// Run the application
-	if err := app.Run(); err != nil {
-		trace := string(debug.Stack())
-		slogLogger.Error(err.Error(), "trace", trace)
-		os.Exit(1)
+	// Connect to database
+	db, err := db.Pool(cfg.Database.Dsn)
+	if err != nil {
+		return err
 	}
+	defer db.Close()
+	logger.Info("Database connection established sucessfully")
+
+	// Initialize services
+	svc := service.New(sqlc.New(db))
+
+	// Initialize API instance
+	api := api.New(cfg, logger, svc)
+
+	return api.Server.Start()
 }

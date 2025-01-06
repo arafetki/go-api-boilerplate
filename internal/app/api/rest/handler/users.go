@@ -52,7 +52,7 @@ func (h *Handler) FetchUserDataHandler(c echo.Context) error {
 
 	authenticatedUser := utils.ContextGetUser(c.Request())
 	if authenticatedUser.ID != params.ID {
-		return echo.NewHTTPError(http.StatusForbidden, "You are not authorized to perform this action.")
+		return echo.NewHTTPError(http.StatusForbidden, "You are not authorized to access this resource.")
 	}
 
 	user, err := h.service.Users.GetOne(params.ID)

@@ -19,7 +19,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type server struct {
+type Server struct {
 	echo    *echo.Echo
 	logger  logging.Logger
 	cfg     config.Config
@@ -27,27 +27,27 @@ type server struct {
 	wg      sync.WaitGroup
 }
 
-func NewServer(cfg config.Config, logger logging.Logger, svc *service.Service) *server {
-	server := &server{
+func NewServer(cfg config.Config, logger logging.Logger, svc *service.Service) *Server {
+	Server := &Server{
 		echo:    echo.New(),
 		logger:  logger,
 		cfg:     cfg,
 		service: svc,
 	}
 
-	// Configure the server
-	server.configure()
+	// Configure the Server
+	Server.configure()
 
 	// Register routes
-	server.routes(
-		handler.New(server.service, server.logger),
-		middleware.New(server.cfg, server.logger),
+	Server.routes(
+		handler.New(Server.service, Server.logger),
+		middleware.New(Server.cfg, Server.logger),
 	)
 
-	return server
+	return Server
 }
 
-func (srv *server) configure() {
+func (srv *Server) configure() {
 	srv.echo.Debug = srv.cfg.Debug
 	srv.echo.HideBanner = !srv.cfg.Debug
 	srv.echo.HidePort = true
@@ -57,7 +57,7 @@ func (srv *server) configure() {
 	srv.echo.HTTPErrorHandler = handleErrors(srv.logger)
 }
 
-func (srv *server) Start() error {
+func (srv *Server) Start() error {
 
 	shutdownErrChan := make(chan error)
 
@@ -93,7 +93,7 @@ func handleErrors(logger logging.Logger) echo.HTTPErrorHandler {
 			return
 		}
 		code := http.StatusInternalServerError
-		var message any = "The server encountered a problem and could not process your request."
+		var message any = "The Server encountered a problem and could not process your request."
 		if httpError, ok := err.(*echo.HTTPError); ok {
 			code = httpError.Code
 			switch code {
@@ -104,7 +104,7 @@ func handleErrors(logger logging.Logger) echo.HTTPErrorHandler {
 			case http.StatusBadRequest:
 				message = "The request could not be understood or was missing required parameters."
 			case http.StatusInternalServerError:
-				message = "The server encountered a problem and could not process your request."
+				message = "The Server encountered a problem and could not process your request."
 			case http.StatusUnprocessableEntity:
 				message = "The request could not be processed due to invalid input."
 			default:
