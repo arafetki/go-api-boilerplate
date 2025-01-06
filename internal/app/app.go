@@ -73,6 +73,7 @@ func (app *Application) Run() error {
 	// Initialize Middleware.
 	middleware := &middlewares.Middleware{
 		Config: app.config,
+		Logger: app.Logger,
 	}
 
 	// Register routes

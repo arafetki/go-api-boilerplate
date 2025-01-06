@@ -26,7 +26,9 @@ func RegisterRoutes(r *echo.Echo, h *handlers.Handler, m *middlewares.Middleware
 	// API version 1 prefix
 	v1 := r.Group("/v1")
 
+	v1.Use(m.Authenticate)
+
 	v1.POST("/users", h.CreateUserHandler)
-	v1.GET("/users/:id", h.FetchUserDataHandler)
+	v1.GET("/users/:id", h.FetchUserDataHandler, m.RequireAuthenticatedUser)
 
 }

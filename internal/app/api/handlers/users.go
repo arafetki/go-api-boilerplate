@@ -6,6 +6,7 @@ import (
 
 	"github.com/arafetki/go-echo-boilerplate/internal/db/sqlc"
 	"github.com/arafetki/go-echo-boilerplate/internal/service"
+	"github.com/arafetki/go-echo-boilerplate/internal/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -47,6 +48,11 @@ func (h *Handler) FetchUserDataHandler(c echo.Context) error {
 	if err := c.Bind(&params); err != nil {
 		h.Logger.Error(err.Error())
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad request")
+	}
+
+	authenticatedUser := utils.ContextGetUser(c.Request())
+	if authenticatedUser.ID != params.ID {
+		return echo.NewHTTPError(http.StatusForbidden, "You are not authorized to perform this action.")
 	}
 
 	user, err := h.Service.Users.GetOne(params.ID)
